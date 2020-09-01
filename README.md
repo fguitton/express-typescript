@@ -10,7 +10,7 @@ Each part of the course has its own branch, called for example [_part-1_](https:
 
 The the [_master_](https://github.com/mwanago/express-typescript) branch represents the version with **MongoDB**.
 
-The [_postgres_](https://github.com/mwanago/express-typescript/tree/postgres) branch contains the version with **PostgreSQL**.
+The [_postgres_](https://github.com/mwanago/express-typescript/tree/postgres) branch contains the version with **TaggreSQL**.
 
 ## Installation
 

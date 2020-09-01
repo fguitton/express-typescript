@@ -1,15 +1,13 @@
 import {
-  cleanEnv, port, str,
+    cleanEnv, port, str
 } from 'envalid';
 
 function validateEnv() {
-  cleanEnv(process.env, {
-    JWT_SECRET: str(),
-    MONGO_PASSWORD: str(),
-    MONGO_PATH: str(),
-    MONGO_USER: str(),
-    PORT: port(),
-  });
+    cleanEnv(process.env, {
+        JWT_SECRET: str(),
+        MONGO_URI: str(),
+        PORT: port()
+    });
 }
 
 export default validateEnv;

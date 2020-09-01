@@ -9,46 +9,54 @@ class App {
   public app: express.Application;
 
   constructor(controllers: Controller[]) {
-    this.app = express();
+      this.app = express();
 
-    this.connectToTheDatabase();
-    this.initializeMiddlewares();
-    this.initializeControllers(controllers);
-    this.initializeErrorHandling();
+      this.connectToTheDatabase();
+      this.initializeMiddlewares();
+      this.initializeControllers(controllers);
+      this.initializeErrorHandling();
+      this.initializeFallback();
   }
 
   public listen() {
-    this.app.listen(process.env.PORT, () => {
-      console.log(`App listening on the port ${process.env.PORT}`);
-    });
+      this.app.listen(process.env.PORT, () => {
+          console.log(`App listening on the port ${process.env.PORT}`);
+      });
   }
 
   public getServer() {
-    return this.app;
+      return this.app;
   }
 
   private initializeMiddlewares() {
-    this.app.use(bodyParser.json());
-    this.app.use(cookieParser());
+      this.app.use(bodyParser.json());
+      this.app.use(cookieParser());
   }
 
   private initializeErrorHandling() {
-    this.app.use(errorMiddleware);
+      this.app.use(errorMiddleware);
+  }
+
+  private initializeFallback() {
+      this.app.all('/*', (__unused__req, res) => {
+          res.status(400);
+          res.json({status: 'Bad request'});
+      });
   }
 
   private initializeControllers(controllers: Controller[]) {
-    controllers.forEach((controller) => {
-      this.app.use('/', controller.router);
-    });
+      controllers.forEach((controller) => {
+          this.app.use('/', controller.router);
+      });
   }
 
   private connectToTheDatabase() {
-    const {
-      MONGO_USER,
-      MONGO_PASSWORD,
-      MONGO_PATH,
-    } = process.env;
-    mongoose.connect(`mongodb://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`);
+      const { MONGO_URI } = process.env;
+      mongoose.set('useNewUrlParser', true);
+      mongoose.set('useFindAndModify', false);
+      mongoose.set('useCreateIndex', true);
+      mongoose.set('useUnifiedTopology', true);
+      mongoose.connect(MONGO_URI);
   }
 }
 
